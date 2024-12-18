@@ -10,7 +10,7 @@ with image.imports():
     import io
     from fastapi import Response
 
-@app.cls(image=image, gpu="A10G")
+@app.cls(image=image, gpu="A10G", timeout=60)
 class Model:
     @modal.build()
     @modal.enter()
