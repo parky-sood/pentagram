@@ -16,10 +16,10 @@ class Model:
     @modal.enter()
     def initialize(self):
         self.pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16")
-        self.pipe.to("cuda")        # self.pipe.enable_model_cpu_offload() #save some VRAM by offloading the model to CPU. Remove this if you have enough GPU power
+        self.pipe.to("cuda")
 
     @modal.web_endpoint()
-    def generate(self, prompt = "A cat holding a sign that says hello world"):
+    def generate(self, prompt):
 
         image = self.pipe(prompt=prompt, num_inference_steps=1, guidance_scale=0.0).images[0]
 
