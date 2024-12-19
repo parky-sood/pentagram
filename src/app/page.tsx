@@ -21,6 +21,16 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { auth } from "@/firebase";
+
+const getIdToken = async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const idToken = await user.getIdToken();
+  return idToken;
+};
 
 interface Post {
   id: number;
@@ -42,10 +52,12 @@ export default function Home() {
     setIsLoading(true);
 
     try {
+      const idToken = await getIdToken();
       const response = await fetch("/api/generate-image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({ text: inputText }),
       });
