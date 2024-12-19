@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { POST } from "./route";
+import { POST } from "../../../src/app/api/generate-image/route";
 
 // src/app/api/generate-image/route.test.ts
 
@@ -23,7 +23,7 @@ describe("POST /api/generate-image", () => {
 
     expect(mockRequest.json).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledWith(
-      "https://parky-sood--image-gen-model-generate.modal.run/",
+      "https://image-diffusion--image-gen-model-generate.modal.run/",
       "test prompt"
     );
     expect(jsonResponse).toEqual({
@@ -48,7 +48,7 @@ describe("POST /api/generate-image", () => {
 
     expect(mockRequest.json).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledWith(
-      "https://parky-sood--image-gen-model-generate.modal.run/",
+      "https://image-diffusion--image-gen-model-generate.modal.run/",
       "test prompt"
     );
     expect(jsonResponse).toEqual({
