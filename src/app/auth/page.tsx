@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PostSkeleton } from "@/components/post-skeleton";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +21,7 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const { signIn, signUp } = useAuth();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const samplePost = {
     id: 1,
@@ -32,6 +34,7 @@ export default function AuthPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     try {
       if (isLogin) {
@@ -39,12 +42,25 @@ export default function AuthPage() {
       } else {
         await signUp(email, password);
       }
+      setIsLoading(false);
       router.push("/");
     } catch (err) {
       setError("Failed to " + (isLogin ? "sign in" : "sign up"));
+      setIsLoading(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+        <div className="flex max-w-5xl w-full gap-8">
+          <div className="hidden md:block w-1/2">
+            <PostSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
       <div className="flex max-w-5xl w-full gap-8">
