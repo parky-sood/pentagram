@@ -15,6 +15,12 @@ import { samplePosts } from "@/data";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 interface Post {
   id: number;
@@ -91,12 +97,27 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4">
             <span>{user?.email}</span>
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
-            >
-              Sign Out
-            </button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button>Profile</Button>
+              </PopoverTrigger>
+              <PopoverContent className="flex flex-col gap-4">
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+                >
+                  Sign Out
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/profile")}
+                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+                >
+                  My Saved Posts
+                </Button>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
