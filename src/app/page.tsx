@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/card";
 
 import { samplePosts } from "@/data";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface Post {
   id: number;
@@ -22,6 +24,8 @@ interface Post {
 }
 
 export default function Home() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,14 +68,34 @@ export default function Home() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      router.push("/auth");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     // TODO: Update the UI here to show the images generated
 
     <div className="min-h-screen flex flex-col justify-between p-8">
       <main className="flex-1">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold">Pentagram</h1>
-          <p className="text-lg">Social Media for your wildest dreams!</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold">Pentagram</h1>
+            <p className="text-lg">Social Media for your wildest dreams!</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>{user?.email}</span>
+            <button
+              onClick={handleSignOut}
+              className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Scrollable feed */}
