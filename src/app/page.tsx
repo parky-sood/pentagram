@@ -40,6 +40,22 @@ export default function Home() {
 
       const data = await response.json();
       console.log(data);
+
+      const binaryData = Buffer.from(data.content.image);
+      const imageBase64 = URL.createObjectURL(
+        new Blob([binaryData.buffer], { type: "image/jpeg" })
+      );
+
+      const newPost: Post = {
+        id: 0,
+        username: "test",
+        prompt: inputText,
+        imageUrl: imageBase64,
+        likes: 0,
+      };
+
+      samplePosts.push(newPost);
+
       setInputText("");
     } catch (error) {
       console.error("Error:", error);
