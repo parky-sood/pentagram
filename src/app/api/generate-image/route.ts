@@ -8,12 +8,12 @@ export async function POST(request: Request) {
     // TODO: Call your Image Generation API here
     // For now, we'll just echo back the text
     const response = await fetch(
-      "https://parky-sood--image-gen-model-generate.modal.run/",
+      "https://image-diffusion--image-gen-model-generate.modal.run",
       text
     ).then(response => response.blob());
 
-    let buffer = await response.arrayBuffer();
-    let object = {
+    const buffer = await response.arrayBuffer();
+    const object = {
       image: Array.from(new Uint8Array(buffer)),
       name: "image",
     };
