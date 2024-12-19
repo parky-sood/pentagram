@@ -12,6 +12,15 @@ import {
 } from "@/components/ui/card";
 
 import { samplePosts } from "@/data";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 interface Post {
   id: number;
@@ -22,8 +31,11 @@ interface Post {
 }
 
 export default function Home() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isScrollingUp = useScrollDirection();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,14 +76,49 @@ export default function Home() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      router.push("/auth");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     // TODO: Update the UI here to show the images generated
 
     <div className="min-h-screen flex flex-col justify-between p-8">
       <main className="flex-1">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold">Pentagram</h1>
-          <p className="text-lg">Social Media for your wildest dreams!</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold">Pentagram</h1>
+            <p className="text-lg">Social Media for your wildest dreams!</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>{user?.email}</span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button>Profile</Button>
+              </PopoverTrigger>
+              <PopoverContent className="flex flex-col gap-4">
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+                >
+                  Sign Out
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/profile")}
+                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+                >
+                  My Saved Posts
+                </Button>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
 
         {/* Scrollable feed */}
@@ -105,8 +152,12 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="w-full max-w-3xl mx-auto">
-        <form onSubmit={handleSubmit} className="w-full">
+      <footer
+        className={`fixed bottom-0 left-0 right-0 p-4 bg-background transition-transform duration-300 ${
+          isScrollingUp ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
           <div className="flex gap-2">
             <input
               type="text"
