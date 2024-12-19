@@ -23,7 +23,7 @@ export async function DELETE() {
   const cookieStore = await cookies();
 
   // Delete the session cookie
-  await cookieStore.delete("session");
+  cookieStore.delete("session");
 
   return NextResponse.json({ success: true });
 }

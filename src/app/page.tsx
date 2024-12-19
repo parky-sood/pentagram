@@ -14,6 +14,7 @@ import {
 import { samplePosts } from "@/data";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 interface Post {
   id: number;
@@ -28,6 +29,7 @@ export default function Home() {
   const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isScrollingUp = useScrollDirection();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,8 +131,12 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="w-full max-w-3xl mx-auto">
-        <form onSubmit={handleSubmit} className="w-full">
+      <footer
+        className={`fixed bottom-0 left-0 right-0 p-4 bg-background transition-transform duration-300 ${
+          isScrollingUp ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <form onSubmit={handleSubmit} className="w-full max-w-3xl mx-auto">
           <div className="flex gap-2">
             <input
               type="text"
