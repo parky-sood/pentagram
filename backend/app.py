@@ -13,13 +13,6 @@ def download_model():
     AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16")
 
 image = (modal.Image.debian_slim().pip_install("fastapi[standard]", "transformers", "accelerate", "diffusers", "requests").run_function(download_model))
-
-# with image.imports():
-#     import io
-#     from datetime import datetime, timezone
-#     from fastapi import Request, Response, Query, HTTPException
-#     import requests
-#     import os
     
 app = modal.App("image-gen", image=image)
 
@@ -40,7 +33,7 @@ class Model:
     # API endpoint to generate image from prompt
     @modal.web_endpoint()
     def generate(self, request: Request, prompt: str = Query(..., description="Prompt to generate image")):
-        # prompt = request.query_params.get("prompt")
+        prompt = request.query_params.get("prompt")
         api_key = request.headers.get("X-API-KEY")
         if api_key != self.API_KEY:
             raise HTTPException(status_code=401, detail="Unauthorized")
