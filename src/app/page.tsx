@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -21,21 +21,45 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import {
+  addDoc,
+  serverTimestamp,
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { postsCollection, FirestorePost } from "@/firebase";
+import { db } from "@/firebase";
+import { Heart } from "lucide-react";
 
-interface Post {
-  id: number;
-  username: string;
-  prompt: string;
-  imageUrl: string;
-  likes: number;
-}
+interface Post extends FirestorePost {}
 
 export default function Home() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
   const isScrollingUp = useScrollDirection();
+
+  useEffect(() => {
+    const q = query(postsCollection, orderBy("createdAt", "desc"));
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const newPosts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Post[];
+      setPosts(newPosts);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,15 +82,14 @@ export default function Home() {
         new Blob([binaryData.buffer], { type: "image/jpeg" })
       );
 
-      const newPost: Post = {
-        id: 0,
-        username: "test",
+      await addDoc(postsCollection, {
+        username: user?.email || "anonymous",
         prompt: inputText,
         imageUrl: imageBase64,
         likes: 0,
-      };
-
-      samplePosts.push(newPost);
+        likedBy: [],
+        createdAt: serverTimestamp(),
+      });
 
       setInputText("");
     } catch (error) {
@@ -85,9 +108,27 @@ export default function Home() {
     }
   };
 
-  return (
-    // TODO: Update the UI here to show the images generated
+  const handleLike = async (
+    postId: string,
+    currentLikes: number,
+    likedBy: string[]
+  ) => {
+    if (!user?.email) return;
 
+    const postRef = doc(db, "posts", postId);
+    const hasLiked = likedBy.includes(user.email);
+
+    try {
+      await updateDoc(postRef, {
+        likes: hasLiked ? currentLikes - 1 : currentLikes + 1,
+        likedBy: hasLiked ? arrayRemove(user.email) : arrayUnion(user.email),
+      });
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
+  };
+
+  return (
     <div className="min-h-screen flex flex-col justify-between p-8">
       <main className="flex-1">
         <div className="mb-8 flex justify-between items-center">
@@ -104,17 +145,17 @@ export default function Home() {
               <PopoverContent className="flex flex-col gap-4">
                 <Button
                   variant="outline"
-                  onClick={handleSignOut}
-                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
-                >
-                  Sign Out
-                </Button>
-                <Button
-                  variant="outline"
                   onClick={() => router.push("/profile")}
                   className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
                 >
                   My Saved Posts
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                  className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
+                >
+                  Sign Out
                 </Button>
               </PopoverContent>
             </Popover>
@@ -123,29 +164,41 @@ export default function Home() {
 
         {/* Scrollable feed */}
         <div className="max-w-2xl mx-auto space-y-6 mb-8">
-          {samplePosts.map((post: Post) => (
-            <Card key={post.id} className="overflow-hidden">
+          {posts.map(post => (
+            <Card key={post.id}>
               <CardHeader>
-                <CardTitle className="text-lg">{post.username}</CardTitle>
+                <CardTitle>{post.username}</CardTitle>
                 <CardDescription>{post.prompt}</CardDescription>
               </CardHeader>
-              <CardContent className="p-0">
-                <div className="relative aspect-[4/3] w-full">
+              <CardContent>
+                <div className="relative aspect-square">
                   <Image
                     src={post.imageUrl}
                     alt={post.prompt}
                     fill
-                    className="object-cover"
-                    priority
+                    className="object-cover rounded-md"
                   />
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between pt-3">
+              <CardFooter className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <button className="hover:text-red-500">❤️</button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() =>
+                      handleLike(post.id, post.likes, post.likedBy)
+                    }
+                    disabled={!user}
+                    className="hover:bg-transparent"
+                  >
+                    {post.likedBy?.includes(user?.email || "") ? (
+                      <Heart className="w-6 h-6 text-red-500" /> // TODO: fill this heart using svg
+                    ) : (
+                      <Heart className="w-6 h-6" />
+                    )}
+                  </Button>
                   <span>{post.likes} likes</span>
                 </div>
-                <button className="hover:text-blue-500">💬</button>
               </CardFooter>
             </Card>
           ))}
