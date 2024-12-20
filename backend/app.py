@@ -68,5 +68,5 @@ def keep_alive():
     
     headers = {"X-API-KEY": os.environ["API_KEY"]}
     generate_response = requests.get(generate_url, headers=headers)
-    print(f"Generate endpoint tested successfully at: {datetime.now(timezone.utc.isoformat())}")
+    print(f"Generate endpoint tested successfully at: {datetime.now(timezone.utc).isoformat()}")
     
