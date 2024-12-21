@@ -131,7 +131,7 @@ export default function Home() {
       <main className="flex-1">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-bold">Pingen</h1>
+            <h1 className="text-4xl font-bold">PinGen</h1>
             <p className="text-lg">Social media for your wildest dreams!</p>
           </div>
           <div className="flex items-center gap-4">
