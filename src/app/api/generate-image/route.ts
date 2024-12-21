@@ -15,17 +15,25 @@ export async function POST(request: Request) {
     const url = new URL(apiUrl);
     url.searchParams.set("prompt", text);
 
-    const response = await fetch(apiUrl.toString(), {
+    console.log(url.toString());
+    const backendReq = {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         "X-API-KEY": process.env.MODAL_API_KEY || "",
         Accept: "image/jpeg",
       },
-    });
+    };
+
+    console.log(backendReq);
+
+    const response = await fetch(url.toString(), backendReq);
+
+    console.log(response);
 
     if (!response.ok) {
       const errorTxt = await response.text();
+      console.log("not ok response");
+
       throw new Error(
         `Failed to fetch image: ${errorTxt} Status code: ${response.status}`
       );
@@ -38,7 +46,7 @@ export async function POST(request: Request) {
       name: "image",
     };
 
-    // console.log(response);
+    console.log(response);
 
     return NextResponse.json({
       success: true,
