@@ -78,14 +78,12 @@ export default function Home() {
       console.log(data);
 
       const binaryData = Buffer.from(data.content.image);
-      const imageBase64 = URL.createObjectURL(
-        new Blob([binaryData.buffer], { type: "image/jpeg" })
-      );
+      const base64String = `data:image/jpeg;base64,${binaryData.toString("base64")}`;
 
       await addDoc(postsCollection, {
         username: user?.email || "anonymous",
         prompt: inputText,
-        imageUrl: imageBase64,
+        imageUrl: base64String, // Store the base64 string directly
         likes: 0,
         likedBy: [],
         createdAt: serverTimestamp(),
@@ -148,7 +146,7 @@ export default function Home() {
                   onClick={() => router.push("/profile")}
                   className="px-4 py-2 rounded-lg bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] transition-colors"
                 >
-                  My Saved Posts
+                  My Liked Posts
                 </Button>
                 <Button
                   variant="outline"
@@ -163,45 +161,49 @@ export default function Home() {
         </div>
 
         {/* Pinterest-style grid */}
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl mx-auto">
-          {posts.map(post => (
-            <Card key={post.id} className="mb-4 break-inside-avoid">
-              <CardContent className="p-4">
-                <div className="relative">
-                  <Image
-                    src={post.imageUrl}
-                    alt={post.prompt}
-                    width={500}
-                    height={500}
-                    className="w-full h-auto rounded-md"
-                    style={{ aspectRatio: "auto" }}
-                  />
-                </div>
-                <div className="mt-4">
-                  <h3 className="font-semibold">{post.username}</h3>
-                  <p className="text-sm text-muted-foreground">{post.prompt}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() =>
-                        handleLike(post.id, post.likes, post.likedBy)
-                      }
-                      disabled={!user}
-                      className="hover:bg-transparent"
-                    >
-                      {post.likedBy?.includes(user?.email || "") ? (
-                        <Heart className="w-6 h-6 text-red-500" />
-                      ) : (
-                        <Heart className="w-6 h-6" />
-                      )}
-                    </Button>
-                    <span>{post.likes} likes</span>
+        <div className="container mx-auto px-4">
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 [column-fill:_balance] mx-auto">
+            {posts.map(post => (
+              <Card key={post.id} className="mb-4 break-inside-avoid">
+                <CardContent className="p-4">
+                  <div className="relative">
+                    <Image
+                      src={post.imageUrl}
+                      alt={post.prompt}
+                      width={500}
+                      height={500}
+                      className="w-full h-auto rounded-md"
+                      style={{ aspectRatio: "auto" }}
+                    />
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  <div className="mt-4">
+                    <h3 className="font-semibold">{post.username}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {post.prompt}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() =>
+                          handleLike(post.id, post.likes, post.likedBy)
+                        }
+                        disabled={!user}
+                        className="hover:bg-transparent"
+                      >
+                        {post.likedBy?.includes(user?.email || "") ? (
+                          <Heart className="w-6 h-6 text-red-500" />
+                        ) : (
+                          <Heart className="w-6 h-6" />
+                        )}
+                      </Button>
+                      <span>{post.likes} likes</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </main>
 
