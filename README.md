@@ -17,7 +17,7 @@
 
 ## 📖 How It Works  
 
-1. **Sign Up / Log In:** Users create an account to join the Pentagram community.  
+1. **Sign Up / Log In:** Users create an account to join the PinGen community.  
 2. **Enter a Prompt:** Provide a description of what you'd like to see.  
 3. **Generate Images:** The AI processes your prompt and generates an image.  
 4. **Post and Explore:** Share your creations or explore what others have shared.  
