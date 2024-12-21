@@ -28,5 +28,7 @@
 - **Stone Werner**  ([stonewerner](https://github.com/stonewerner))
 - **Rahul Sudev**([RahulSudev03](https://github.com/RahulSudev03))  
 
+## Notes on Usage:
+Due to free compute limits on Modal, the backend has been paused. If you would like to try out the app locally, send a message at ![parkysood@gmail.com](parkysood@gmail.com).
 
 
