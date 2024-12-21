@@ -98,7 +98,7 @@ export default function AuthPage() {
           <Card className="p-6">
             <CardHeader>
               <CardTitle className="text-2xl text-center mb-2">
-                Pentagram
+                PinGen
               </CardTitle>
               <CardDescription className="text-center">
                 {isLogin
