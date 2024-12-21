@@ -24,9 +24,9 @@
 
 ## 🧑‍💻 Project Contributors  
 
-- **Parikshit Sood**  
-- **Stone Werner**  
-- **Rahul Sudev**  
+- **Parikshit Sood** ([parky-sood](https://github.com/parky-sood)) 
+- **Stone Werner**  ([stonewerner](https://github.com/stonewerner))
+- **Rahul Sudev**([RahulSudev03](https://github.com/RahulSudev03))  
 
 
 
