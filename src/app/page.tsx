@@ -133,8 +133,8 @@ export default function Home() {
       <main className="flex-1">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-bold">Pentagram</h1>
-            <p className="text-lg">Social Media for your wildest dreams!</p>
+            <h1 className="text-4xl font-bold">Pingen</h1>
+            <p className="text-lg">Social media for your wildest dreams!</p>
           </div>
           <div className="flex items-center gap-4">
             <span>{user?.email}</span>
@@ -162,44 +162,44 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scrollable feed */}
-        <div className="max-w-2xl mx-auto space-y-6 mb-8">
+        {/* Pinterest-style grid */}
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 max-w-7xl mx-auto">
           {posts.map(post => (
-            <Card key={post.id}>
-              <CardHeader>
-                <CardTitle>{post.username}</CardTitle>
-                <CardDescription>{post.prompt}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="relative aspect-square">
+            <Card key={post.id} className="mb-4 break-inside-avoid">
+              <CardContent className="p-4">
+                <div className="relative">
                   <Image
                     src={post.imageUrl}
                     alt={post.prompt}
-                    fill
-                    className="object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    className="w-full h-auto rounded-md"
+                    style={{ aspectRatio: "auto" }}
                   />
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() =>
-                      handleLike(post.id, post.likes, post.likedBy)
-                    }
-                    disabled={!user}
-                    className="hover:bg-transparent"
-                  >
-                    {post.likedBy?.includes(user?.email || "") ? (
-                      <Heart className="w-6 h-6 text-red-500" /> // TODO: fill this heart using svg
-                    ) : (
-                      <Heart className="w-6 h-6" />
-                    )}
-                  </Button>
-                  <span>{post.likes} likes</span>
+                <div className="mt-4">
+                  <h3 className="font-semibold">{post.username}</h3>
+                  <p className="text-sm text-muted-foreground">{post.prompt}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        handleLike(post.id, post.likes, post.likedBy)
+                      }
+                      disabled={!user}
+                      className="hover:bg-transparent"
+                    >
+                      {post.likedBy?.includes(user?.email || "") ? (
+                        <Heart className="w-6 h-6 text-red-500" />
+                      ) : (
+                        <Heart className="w-6 h-6" />
+                      )}
+                    </Button>
+                    <span>{post.likes} likes</span>
+                  </div>
                 </div>
-              </CardFooter>
+              </CardContent>
             </Card>
           ))}
         </div>
