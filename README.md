@@ -1,45 +1,32 @@
-# Pentagram: Instagram, but with AI Images
+# Pentagram  
 
-## Getting Started
+**Pentagram** is an innovative platform, like Instagram, but with a twist! Instead of sharing traditional photos, users generate and share **AI-generated images** by providing creative prompts. This project combines social media dynamics with cutting-edge AI image generation technology, offering a unique way for users to express themselves and explore their creativity.
 
-First, clone the GitHub repository:
+## 🚀 Features  
 
-```bash
-git clone https://github.com/team-headstart/pentagram.git
-```
-
-Then, navigate to the project directory:
-
-```bash
-cd pentagram
-```
-
-Then, install the dependencies:
-
-```bash
-npm install
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Tasks
-
-- Take a look at the TODOs in the repo, namely:
-
-    - `src/app/page.tsx`: This is where the user can input their prompt and generate an image. Make sure to update the UI and handle the API response to display the images generated
-
-    - `src/app/api/generate-image/route.ts`: This is where the image generation API is implemented. Make sure to call your image generation API from Modal here
+- **AI-Powered Image Generation:** Users create custom images by simply entering prompts.  
+- **Interactive Social Platform:** Share your generated images, explore others' creations, and engage with a creative community.  
+- **Prompt-Based Creativity:** Experiment with different prompts to unleash endless creative possibilities.  
 
 
-## Learn More
+## 🛠️ Technology Stack  
 
-To learn more about Next.js, take a look at the following resources:
+- **AI Model Hosting:** Used [Modal](https://modal.com) to host an **SDXL Turbo** image-generating model.  
+- **Database:** Used **Firebase** for efficient and scalable data storage and retrieval.  
+- **Frontend Framework:** Built the application using **Next.js** for a seamless and responsive user experience.   
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📖 How It Works  
+
+1. **Sign Up / Log In:** Users create an account to join the Pentagram community.  
+2. **Enter a Prompt:** Provide a description of what you'd like to see.  
+3. **Generate Images:** The AI processes your prompt and generates an image.  
+4. **Post and Explore:** Share your creations or explore what others have shared.  
+
+## 🧑‍💻 Project Contributors  
+
+- **Parikshit Sood**  
+- **Stone Werner**  
+- **Rahul Sudev**  
+
+
+
