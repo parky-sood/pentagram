@@ -1,6 +1,6 @@
-# Pentagram  
+# PinGen  
 
-**Pentagram** is an innovative platform, like Instagram, but with a twist! Instead of sharing traditional photos, users generate and share **AI-generated images** by providing creative prompts. This project combines social media dynamics with cutting-edge AI image generation technology, offering a unique way for users to express themselves and explore their creativity.
+**PinGen** is an innovative platform, like Instagram, but with a twist! Instead of sharing traditional photos, users generate and share **AI-generated images** by providing creative prompts. This project combines social media dynamics with cutting-edge AI image generation technology, offering a unique way for users to express themselves and explore their creativity.
 
 ## 🚀 Features  
 
